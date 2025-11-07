@@ -1,0 +1,20 @@
+{
+  "name": "ndsdbapi",
+  "version": "1.0.0",
+  "description": "API pour les jeux NDS",
+  "main": "index.js",
+"scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["api", "nds", "nintendo"],
+  "author": "Rinzler",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

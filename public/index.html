@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NDS DB API - Documentation</title>
+  <style>
+    /* --- Styles Généraux --- */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 960px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e9ecef;
+      margin-bottom: 30px;
+    }
+    
+    header h1 {
+      color: #0d6efd;
+      margin: 0;
+    }
+
+    h2 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-top: 40px;
+      color: #0d6efd;
+    }
+
+    h3 {
+      margin-top: 25px;
+      color: #555;
+    }
+
+    /* --- Styles pour les Endpoints --- */
+    .endpoint {
+      background-color: #fdfdfd;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      overflow: hidden; /* Pour le pre > code */
+    }
+
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background-color: #f7f7f7;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .method {
+      padding: 5px 10px;
+      background-color: #0d6efd; /* Bleu pour GET */
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      margin-right: 15px;
+    }
+    
+    .path {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 1.1em;
+      color: #d63384; /* Rose pour le chemin */
+      font-weight: 600;
+    }
+
+    .endpoint-content {
+      padding: 15px;
+    }
+    
+    .endpoint-content p {
+      margin-top: 0;
+    }
+
+    /* --- Styles pour le Code --- */
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      background-color: #e9ecef;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    pre {
+      background-color: #282c34; /* Thème sombre pour les blocs de code */
+      color: #abb2bf;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 0.9em;
+    }
+
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+    
+    .text-muted {
+      color: #6c757d;
+      font-size: 0.9em;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>NDS DB API</h1>
+      <p>Documentation de l'API REST pour la base de données de jeux Nintendo DS.</p>
+      <p><strong>Base URL:</strong> <code>/api</code></p>
+    </header>
+
+    <main>
+      <section id="endpoints">
+        <h2>Endpoints</h2>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="path">/api/games</span>
+          </div>
+          <div class="endpoint-content">
+            <p>Récupère la liste complète des jeux NDS. Accepte des filtres en paramètres de requête.</p>
+            
+            <h3>Paramètres de Requête (Query)</h3>
+            <ul>
+              <li><code>region</code> (optionnel): Filtre les jeux par région (ex: <code>USA</code>, <code>EUR</code>, <code>JPN</code>).</li>
+              <li><code>publisher</code> (optionnel): Filtre les jeux par éditeur (sensible à la casse, recherche partielle).</li>
+            </ul>
+
+            <h3>Exemples d'utilisation</h3>
+            <p>Pour tous les jeux :</p>
+            <pre><code><a href="/api/games" target="_blank">/api/games</a></code></pre>
+            
+            <p>Pour les jeux de la région USA :</p>
+            <pre><code><a href="/api/games?region=USA" target="_blank">/api/games?region=USA</a></code></pre>
+            
+            <p>Pour les jeux publiés par "Nintendo" :</p>
+            <pre><code><a href="/api/games?publisher=Nintendo" target="_blank">/api/games?publisher=Nintendo</a></code></pre>
+            
+            <h3>Exemple de Réponse (raccourci)</h3>
+            <pre><code>[
+  {
+    "id": "A2DE",
+    "serial": "NTR-A2DE-USA",
+    "title": "Animal Crossing: Wild World",
+    "region": "USA",
+    ...
+  },
+  ...
+]</code></pre>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="path">/api/games/:id</span>
+          </div>
+          <div class="endpoint-content">
+            <p>Récupère un jeu spécifique en utilisant son <code>id</code> (ex: A2DE) ou son <code>serial</code> (ex: NTR-A2DE-USA).</p>
+            
+            <h3>Paramètres d'URL</h3>
+            <ul>
+              <li><code>:id</code> (requis): L'identifiant unique ou le numéro de série du jeu.</li>
+            </ul>
+
+            <h3>Exemples d'utilisation</h3>
+            <pre><code><a href="/api/games/A2DE" target="_blank">/api/games/A2DE</a></code></pre>
+            <pre><code><a href="/api/games/NTR-YQUE-EUR" target="_blank">/api/games/NTR-YQUE-EUR</a></code></pre>
+            
+            <h3>Exemple de Réponse</h3>
+            <pre><code>{
+  "id": "A2DE",
+  "serial": "NTR-A2DE-USA",
+  "title": "Animal Crossing: Wild World",
+  "region": "USA",
+  "publisher": "Nintendo",
+  "release_date": "2005-12-05",
+  "languages": ["en", "fr", "es"]
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method">GET</span>
+            <span class="path">/api/search</span>
+          </div>
+          <div class="endpoint-content">
+            <p>Recherche des jeux dont le titre correspond à la requête. La recherche n'est pas sensible à la casse.</p>
+            
+            <h3>Paramètres de Requête (Query)</h3>
+            <ul>
+              <li><code>title</code> (requis): Le terme de recherche à inclure dans le titre.</li>
+            </ul>
+
+            <h3>Exemples d'utilisation</h3>
+            <pre><code><a href="/api/search?title=layton" target="_blank">/api/search?title=layton</a></code></pre>
+            <pre><code><a href="/api/search?title=animal" target="_blank">/api/search?title=animal</a></code></pre>
+            
+            <h3>Exemple de Réponse</h3>
+            <pre><code>[
+  {
+    "id": "YQUE",
+    "serial": "NTR-YQUE-EUR",
+    "title": "Professor Layton and the Curious Village",
+    "region": "EUR",
+    ...
+  }
+]</code></pre>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>
