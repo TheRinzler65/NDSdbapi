@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NDS DB API - Documentation</title>
   <style>
-    /* --- Styles Généraux --- */
+    /* --- Styles Généraux (inchangés) --- */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
@@ -14,112 +14,25 @@
       margin: 0;
       padding: 0;
     }
+    .container { max-width: 960px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+    header { text-align: center; padding-bottom: 20px; border-bottom: 2px solid #e9ecef; margin-bottom: 30px; }
+    header h1 { color: #0d6efd; margin: 0; }
+    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 40px; color: #0d6efd; }
+    h3 { margin-top: 25px; color: #555; }
+
+    /* --- Styles pour les Endpoints (inchangés) --- */
+    .endpoint { background-color: #fdfdfd; border: 1px solid #e9ecef; border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
+    .endpoint-header { display: flex; align-items: center; padding: 12px 15px; background-color: #f7f7f7; border-bottom: 1px solid #e9ecef; }
+    .method { padding: 5px 10px; background-color: #0d6efd; color: white; font-weight: bold; border-radius: 4px; font-size: 0.9em; text-transform: uppercase; margin-right: 15px; }
+    .path { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 1.1em; color: #d63384; font-weight: 600; }
+    .endpoint-content { padding: 15px; }
+    .endpoint-content p { margin-top: 0; }
     
-    .container {
-      max-width: 960px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    header {
-      text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #e9ecef;
-      margin-bottom: 30px;
-    }
-    
-    header h1 {
-      color: #0d6efd;
-      margin: 0;
-    }
-
-    h2 {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
-      margin-top: 40px;
-      color: #0d6efd;
-    }
-
-    h3 {
-      margin-top: 25px;
-      color: #555;
-    }
-
-    /* --- Styles pour les Endpoints --- */
-    .endpoint {
-      background-color: #fdfdfd;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      overflow: hidden; /* Pour le pre > code */
-    }
-
-    .endpoint-header {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      background-color: #f7f7f7;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .method {
-      padding: 5px 10px;
-      background-color: #0d6efd; /* Bleu pour GET */
-      color: white;
-      font-weight: bold;
-      border-radius: 4px;
-      font-size: 0.9em;
-      text-transform: uppercase;
-      margin-right: 15px;
-    }
-    
-    .path {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-      font-size: 1.1em;
-      color: #d63384; /* Rose pour le chemin */
-      font-weight: 600;
-    }
-
-    .endpoint-content {
-      padding: 15px;
-    }
-    
-    .endpoint-content p {
-      margin-top: 0;
-    }
-
-    /* --- Styles pour le Code --- */
-    code {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-      background-color: #e9ecef;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-size: 0.95em;
-    }
-
-    pre {
-      background-color: #282c34; /* Thème sombre pour les blocs de code */
-      color: #abb2bf;
-      padding: 15px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-size: 0.9em;
-    }
-
-    pre code {
-      background-color: transparent;
-      padding: 0;
-      color: inherit;
-    }
-    
-    .text-muted {
-      color: #6c757d;
-      font-size: 0.9em;
-    }
-
+    /* --- Styles pour le Code (inchangés) --- */
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; background-color: #e9ecef; padding: 3px 6px; border-radius: 4px; font-size: 0.95em; }
+    pre { background-color: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 0.9em; }
+    pre code { background-color: transparent; padding: 0; color: inherit; }
+    .text-muted { color: #6c757d; font-size: 0.9em; }
   </style>
 </head>
 <body>
@@ -141,33 +54,23 @@
             <span class="path">/api/games</span>
           </div>
           <div class="endpoint-content">
-            <p>Récupère la liste complète des jeux NDS. Accepte des filtres en paramètres de requête.</p>
+            <p>Récupère la <strong>liste principale et minimaliste</strong> des jeux. Idéal pour les recherches rapides et l'indexation.</p>
             
-            <h3>Paramètres de Requête (Query)</h3>
-            <ul>
-              <li><code>region</code> (optionnel): Filtre les jeux par région (ex: <code>USA</code>, <code>EUR</code>, <code>JPN</code>).</li>
-              <li><code>publisher</code> (optionnel): Filtre les jeux par éditeur (sensible à la casse, recherche partielle).</li>
-            </ul>
-
             <h3>Exemples d'utilisation</h3>
-            <p>Pour tous les jeux :</p>
             <pre><code><a href="/api/games" target="_blank">/api/games</a></code></pre>
             
-            <p>Pour les jeux de la région USA :</p>
-            <pre><code><a href="/api/games?region=USA" target="_blank">/api/games?region=USA</a></code></pre>
-            
-            <p>Pour les jeux publiés par "Nintendo" :</p>
-            <pre><code><a href="/api/games?publisher=Nintendo" target="_blank">/api/games?publisher=Nintendo</a></code></pre>
-            
-            <h3>Exemple de Réponse (raccourci)</h3>
+            <h3>Exemple de Réponse (minimaliste)</h3>
             <pre><code>[
   {
     "id": "A2DE",
     "serial": "NTR-A2DE-USA",
-    "title": "Animal Crossing: Wild World",
-    "region": "USA",
-    ...
+    "title": "Animal Crossing: Wild World"
   },
+  {
+    "id": "YQUE",
+    "serial": "NTR-YQUE-EUR",
+    "title": "Professor Layton and the Curious Village"
+  }
   ...
 ]</code></pre>
           </div>
@@ -179,26 +82,59 @@
             <span class="path">/api/games/:id</span>
           </div>
           <div class="endpoint-content">
-            <p>Récupère un jeu spécifique en utilisant son <code>id</code> (ex: A2DE) ou son <code>serial</code> (ex: NTR-A2DE-USA).</p>
+            <p>Récupère les <strong>données complètes et riches</strong> d'un jeu spécifique en utilisant son <code>id</code> (ex: A2DE) ou son <code>serial</code> (ex: NTR-A2DE-USA).</p>
+            <p>Cette route fusionne les données de base avec le <code>meta.json</code> correspondant et construit dynamiquement les URLs des assets.</p>
             
-            <h3>Paramètres d'URL</h3>
-            <ul>
-              <li><code>:id</code> (requis): L'identifiant unique ou le numéro de série du jeu.</li>
-            </ul>
-
             <h3>Exemples d'utilisation</h3>
             <pre><code><a href="/api/games/A2DE" target="_blank">/api/games/A2DE</a></code></pre>
-            <pre><code><a href="/api/games/NTR-YQUE-EUR" target="_blank">/api/games/NTR-YQUE-EUR</a></code></pre>
+            <pre><code><a href="/api/games/NTR-A2DE-USA" target="_blank">/api/games/NTR-A2DE-USA</a></code></pre>
             
-            <h3>Exemple de Réponse</h3>
+            <h3>Exemple de Réponse (riche)</h3>
             <pre><code>{
   "id": "A2DE",
   "serial": "NTR-A2DE-USA",
   "title": "Animal Crossing: Wild World",
-  "region": "USA",
-  "publisher": "Nintendo",
+  "name": "Animal Crossing: Wild World",
+  "formal_name": "Animal Crossing: Wild World",
+  "description": "Vivez une nouvelle vie dans un charmant village où vous pouvez vous lier d'amitié avec les animaux, pêcher, attraper des insectes et décorer votre maison.&lt;br/&gt;&lt;br/&gt;Connectez-vous en Wi-Fi Nintendo pour visiter les villages de vos amis.",
   "release_date": "2005-12-05",
-  "languages": ["en", "fr", "es"]
+  "product_code": "NTR-A2DE-USA",
+  "platform_name": "Nintendo DS",
+  "region": "USA",
+  "genres": [
+    "Simulation de vie"
+  ],
+  "features": [
+    "Nintendo Wi-Fi Connection",
+    "Multi-cart Play",
+    "Single-cart Download Play",
+    "Touch Screen"
+  ],
+  "languages": [
+    "English",
+    "Spanish",
+    "French"
+  ],
+  "rating_system": {
+    "name": "ESRB",
+    "age": "E"
+  },
+  "developer": "Nintendo EAD",
+  "publisher": "Nintendo",
+  "assets": {
+    "icon_url": "/db/nds/base/NTR-A2DE-USA/icon.jpg",
+    "banner_url": "/db/nds/base/NTR-A2DE-USA/banner.jpg",
+    "top_image_url": "/db/nds/base/NTR-A2DE-USA/top_image.jpg",
+    "screenshots_urls": [
+      "/db/nds/base/NTR-A2DE-USA/screenshots/ss_01.png",
+      "/db/nds/base/NTR-A2DE-USA/screenshots/ss_02.png",
+      "/db/nds/base/NTR-A2DE-USA/screenshots/ss_03.png"
+    ],
+    "screenshots_uncompiled_urls": [
+      "/db/nds/base/NTR-A2DE-USA/screenshots_uncompiled/ss_uncompiled_01.png"
+    ],
+    "thumbnails_urls": []
+  }
 }</code></pre>
           </div>
         </div>
@@ -209,7 +145,7 @@
             <span class="path">/api/search</span>
           </div>
           <div class="endpoint-content">
-            <p>Recherche des jeux dont le titre correspond à la requête. La recherche n'est pas sensible à la casse.</p>
+            <p>Recherche des jeux dont le titre correspond à la requête (basé sur la liste <strong>minimaliste</strong>).</p>
             
             <h3>Paramètres de Requête (Query)</h3>
             <ul>
@@ -218,16 +154,13 @@
 
             <h3>Exemples d'utilisation</h3>
             <pre><code><a href="/api/search?title=layton" target="_blank">/api/search?title=layton</a></code></pre>
-            <pre><code><a href="/api/search?title=animal" target="_blank">/api/search?title=animal</a></code></pre>
             
-            <h3>Exemple de Réponse</h3>
+            <h3>Exemple de Réponse (minimaliste)</h3>
             <pre><code>[
   {
     "id": "YQUE",
     "serial": "NTR-YQUE-EUR",
-    "title": "Professor Layton and the Curious Village",
-    "region": "EUR",
-    ...
+    "title": "Professor Layton and the Curious Village"
   }
 ]</code></pre>
           </div>

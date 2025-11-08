@@ -4,8 +4,8 @@
   "description": "API pour les jeux NDS",
   "main": "index.js",
 "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": ["api", "nds", "nintendo"],
   "author": "Rinzler",
